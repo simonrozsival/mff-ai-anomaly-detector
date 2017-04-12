@@ -1,0 +1,29 @@
+{
+  "name": "mff-ai-anomaly-detector",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:simonrozsival/mff-ai-anomaly-detector.git",
+  "author": "Simon Rozsival <simon@rozsival.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "babel-node index.js",
+    "mock-data-stream": "babel-node mock-data-stream",
+    "mock-test": "npm run mock-data-stream | npm run start",
+    "test": "mocha",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "babel-cli": "^6.24.0",
+    "byline": "^5.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.0",
+    "babel-eslint": "^7.2.1",
+    "babel-preset-es2015": "^6.24.0",
+    "chai": "^3.5.0",
+    "eslint": "^3.19.0",
+    "eslint-plugin-import": "^2.2.0",
+    "mocha": "^3.2.0",
+    "system-sleep": "^1.3.0"
+  }
+}
