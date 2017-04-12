@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<recording>
+	<toplevelgroup name="Navdata" file="navdata.tsv" separator="tab">
+		<time unit="milliseconds" source="recorder" />
+		<intEnumeration name="State">
+			<option value="0" label="Unknown" />
+			<option value="1" label="Init" />
+			<option value="2" label="Landed" />
+			<option value="3" label="Flying" />
+			<option value="4" label="Hovering" />
+			<option value="5" label="Test" />
+			<option value="6" label="Taking off" />
+			<option value="7" label="Go to point" />
+			<option value="8" label="Landing" />
+			<option value="9" label="Looping" />
+		</intEnumeration>
+		<intQuantity name="Battery level" unit="percent"/>
+		<group name="Magnetometer readings">
+			<!-- Unit: might be milli-g ?-->
+			<intQuantity name="Magnetometer x" unit="?" />
+			<intQuantity name="Magnetometer y" unit="?" />
+			<intQuantity name="Magnetometer z" unit="?" />
+		</group>
+		<intQuantity name="Pressure" unit="Pa"/>
+		<intQuantity name="Temperature" unit="?"/>
+		<group name="Wind conditions">
+			<doubleQuantity name="Wind speed" unit="m/s" />
+			<!-- Estimated wind direction in North-East frame [rad]  e.g. if wind_angle is pi/4, wind is from South-West to North-East -->
+			<!-- Is the documentation right? It seems like that the unit is in fact degrees. -->
+			<doubleQuantity name="Wind angle" unit="rad" />
+			<doubleQuantity name="Wind compensation: pitch" unit="milli-degrees" />
+			<doubleQuantity name="Wind compensation: roll" unit="milli-degrees" />
+		</group>
+		<group name="Rotation">
+			<doubleQuantity name="Pitch (Rotation around y)" unit="milli-degrees" />
+			<doubleQuantity name="Roll (Rotation around x)" unit="milli-degrees" />
+			<doubleQuantity name="Yaw (Rotation around z)" unit="milli-degrees" />
+		</group>
+		<intQuantity name="Altitude" unit="millimeters" />
+		<group name="Velocity">
+			<doubleQuantity name="Velocity in x" unit="mm/s"/>
+			<doubleQuantity name="Velocity in y" unit="mm/s"/>
+			<doubleQuantity name="Velocity in z" unit="mm/s"/>
+		</group>
+		<group name="Acceleration">
+			<doubleQuantity name="Acceleration in x" unit="mg"/>
+			<doubleQuantity name="Acceleration in y" unit="mg"/>
+			<doubleQuantity name="Acceleration in z" unit="mg"/>
+		</group>
+		<group name="Motor powers">
+			<intQuantity name="Motor 1 power" unit="0-255"/>
+			<intQuantity name="Motor 2 power" unit="0-255"/>
+			<intQuantity name="Motor 3 power" unit="0-255"/>
+			<intQuantity name="Motor 4 power" unit="0-255"/>
+		</group>
+		<time unit="microseconds" source="board"/>
+	</toplevelgroup>
+	<toplevelgroup name="Commands" file="commands.tsv" separator="tab">
+		<time unit="milliseconds" source="recorder" />
+		<doubleQuantity name="Left-right tilt" unit="-1 to 1" />
+		<doubleQuantity name="Front-back tilt" unit="-1 to 1" />
+		<doubleQuantity name="Vertical speed" unit="-1 to 1" />
+		<doubleQuantity name="Angular speed" unit="-1 to 1" />
+	</toplevelgroup>
+</recording>
