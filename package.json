@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "mock-data-stream": "node --harmony mock-data-stream.js"
+  }
+}
