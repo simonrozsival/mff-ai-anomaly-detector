@@ -72,3 +72,27 @@ export const col = (data, c) => data.map(item => item[c]);
  * @returns {Array} The data with only specific columns
  */
 export const cols = (data, cs) => data.map(item => cs.map(c => item[c]));
+
+/**
+ * Calculate the variances of the data.
+ * @param {Object} window
+ * @returns {Array} Variances
+ */
+export const variances = ({ data, means }) =>
+  means.map((mean, i) => variance(col(data, i), mean));
+
+/**
+ * Calculate the standard deviations of the data.
+ * @param {Object} window
+ * @returns {Array} Standard deviations
+ */
+export const stddevs = window => variances(window).map(Math.sqrt);
+
+/**
+ * Calculate the variance of the vector.
+ * @param {Array} X The vector
+ * @param {Number} m The mean of the vector
+ * @returns {Number} The variance of the numbers of the vector
+ */
+export const variance = (X, m) =>
+  X.map(x => (x - m) ** 2).reduce((acc, x) => acc + x) / X.length;

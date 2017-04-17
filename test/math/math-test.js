@@ -1,7 +1,16 @@
 import chai from 'chai';
 import roughly from 'chai-roughly';
 
-import { mean, means, shiftMeans, dot, col, cols } from '../../src/math';
+import {
+  mean,
+  means,
+  shiftMeans,
+  dot,
+  col,
+  cols,
+  variance,
+  stddevs
+} from '../../src/math';
 
 chai.use(roughly);
 const { expect } = chai;
@@ -72,6 +81,21 @@ describe('Math', () => {
       const removed = [1, 1, 1];
 
       expect(shiftMeans(means, size, removed, input)).to.roughly.eql([2, 3, 4]);
+    });
+  });
+
+  describe('variance', () => {
+    it('must calculate variance', () => {
+      const v = variance([600, 470, 170, 430, 300], 394);
+      expect(v).to.equal(21704);
+    });
+
+    it('must calculate variance', () => {
+      const v = stddevs({
+        data: [[600], [470], [170], [430], [300]],
+        means: [394]
+      });
+      expect(v).to.roughly.eql([Math.sqrt(21704)]);
     });
   });
 });
