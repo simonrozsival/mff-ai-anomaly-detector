@@ -9,4 +9,4 @@ export { isAnomalous } from './isAnomalous';
 
 export { parseSensorReading } from './parser';
 
-export { smooth } from './smoothing';
+export { delta, smooth } from './smoothing';
