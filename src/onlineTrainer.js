@@ -1,5 +1,5 @@
 import distance from './mahalanobis';
-import { mean, dot, col, cols } from './math';
+import { dot, col, cols } from './math';
 
 /**
  *
@@ -7,8 +7,8 @@ import { mean, dot, col, cols } from './math';
  * @param {Number} ct The correlation threshold constant
  * @returns {Array} The sets of correlated attributes with the threshold distance
  */
-export const onlineTrainer = (data, ct) => {
-  const correlations = correlationDetector(data, ct);
+export const onlineTrainer = ({ data, means }, ct = 0.6) => {
+  const correlations = correlationDetector({ data, means }, ct);
   const withThresholds = computeThresholds(correlations, data);
 
   return withThresholds;
@@ -20,7 +20,7 @@ export const onlineTrainer = (data, ct) => {
  * @param {Number} ct The correlation threshold constant
  * @returns {Array} The array of correlated attributes with their thresholds
  */
-const corelationDetector = (data, ct = 0.005) => {
+const corelationDetector = ({ data, means }, ct) => {
   if (data.length === 0) {
     return []; // no items === no correlation
   }
@@ -33,7 +33,7 @@ const corelationDetector = (data, ct = 0.005) => {
     for (let j = 0; j < attributesCount; ++j) {
       const A = col(data, i);
       const B = col(data, j);
-      const p = pearsonCorrelationCoefficient(A, B);
+      const p = pearsonCorrelationCoefficient(A, means[i], B, means[j]);
       if (Math.abs(p) > ct) {
         attrs.push(j);
       }
@@ -50,12 +50,12 @@ const corelationDetector = (data, ct = 0.005) => {
 /**
  * Calculate the pearson correlation coefficient of the two vectors
  * @param {Array} X Vector of numbers
+ * @param {Number} mx Mean of X
  * @param {Array} Y Vector of numbers
+ * * @param {Number} my Mean of Y
  * @returns {Number} The correlation coefficient
  */
-const pearsonCorrelationCoefficient = (X, Y) => {
-  const mx = mean(X);
-  const my = mean(Y);
+const pearsonCorrelationCoefficient = (X, mx, Y, my) => {
   const mX = X.map(x => x - mx);
   const mY = Y.map(y => y - my);
   return dot(mX, mY) / Math.sqrt(dot(mX, mX) * dot(mY, mY));
