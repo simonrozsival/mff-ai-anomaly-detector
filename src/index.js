@@ -3,14 +3,10 @@
  * @author Šimon Rozsíval <simon@rozsival.com>
  */
 
-export {
-  shiftWindow
-} from './slidingWindow';
+export { shiftWindow } from './slidingWindow';
 
-export {
-  isAnomalous
-} from './isAnomalous';
+export { isAnomalous } from './isAnomalous';
 
-export {
-  parseSensorReading
-} from './parser';
+export { parseSensorReading } from './parser';
+
+export { smooth } from './smoothing';
