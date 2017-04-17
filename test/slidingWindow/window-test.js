@@ -5,21 +5,21 @@ import { create, shift, trim } from '../../src/slidingWindow';
 describe('Sliding window', () => {
   it('must trim the window to a desired size', () => {
     const data = [[1], [2], [3], [4], [5]];
-    expect(trim(data, 1)).to.eql([[5]]);
-    expect(trim(data, 2)).to.eql([[4], [5]]);
-    expect(trim(data, 3)).to.eql([[3], [4], [5]]);
-    expect(trim(data, 4)).to.eql([[2], [3], [4], [5]]);
-    expect(trim(data, 5)).to.eql([[1], [2], [3], [4], [5]]);
-    expect(trim(data, 100)).to.eql([[1], [2], [3], [4], [5]]);
+    expect(trim(data, 1)).to.eql([[[5]], [[1], [2], [3], [4]]]);
+    expect(trim(data, 2)).to.eql([[[4], [5]], [[1], [2], [3]]]);
+    expect(trim(data, 3)).to.eql([[[3], [4], [5]], [[1], [2]]]);
+    expect(trim(data, 4)).to.eql([[[2], [3], [4], [5]], [[1]]]);
+    expect(trim(data, 5)).to.eql([[[1], [2], [3], [4], [5]], []]);
+    expect(trim(data, 100)).to.eql([[[1], [2], [3], [4], [5]], []]);
   });
 
   it('must initialise a new empty window', () => {
-    const x = [1, 2, 3];
     const window = create(10);
     expect(window).to.eql({
       capacity: 10,
       size: 0,
-      data: []
+      data: [],
+      means: []
     });
   });
 
@@ -29,7 +29,8 @@ describe('Sliding window', () => {
     expect(window).to.eql({
       capacity: 10,
       size: 1,
-      data: [x]
+      data: [x],
+      means: x
     });
   });
 
@@ -41,7 +42,8 @@ describe('Sliding window', () => {
     expect(updatedWindow).to.eql({
       capacity: 2,
       size: 2,
-      data: [x, y]
+      data: [x, y],
+      means: [2.5, 3.5, 4.5]
     });
   });
 
@@ -54,7 +56,8 @@ describe('Sliding window', () => {
     expect(updatedWindow).to.eql({
       capacity: 2,
       size: 2,
-      data: [y, z]
+      data: [y, z],
+      means: [5.5, 6.5, 7.5]
     });
   });
 
@@ -67,7 +70,8 @@ describe('Sliding window', () => {
     expect(updatedWindow).to.eql({
       capacity: 1,
       size: 1,
-      data: [z]
+      data: [z],
+      means: z
     });
   });
 
@@ -75,7 +79,26 @@ describe('Sliding window', () => {
     const x = [1, 2, 3];
     const y = [4, 5, 6];
     const z = [7, 8, 9];
-    const window = shift(z, shift(y, shift(x, create(1))));
-    expect(window).to.eql({ capacity: 1, size: 1, data: [z] });
+    let window = create(2);
+    expect(window).to.eql({ capacity: 2, size: 0, data: [], means: [] });
+
+    window = shift(x, window);
+    expect(window).to.eql({ capacity: 2, size: 1, data: [x], means: x });
+
+    window = shift(y, window);
+    expect(window).to.eql({
+      capacity: 2,
+      size: 2,
+      data: [x, y],
+      means: [2.5, 3.5, 4.5]
+    });
+
+    window = shift(z, window);
+    expect(window).to.eql({
+      capacity: 2,
+      size: 2,
+      data: [y, z],
+      means: [5.5, 6.5, 7.5]
+    });
   });
 });

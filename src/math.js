@@ -7,6 +7,36 @@ export const mean = X =>
   X.length === 0 ? 0 : X.reduce((acc, x) => acc + x, 0) / X.length;
 
 /**
+ * Calculate the means of the columns in the data matrix.
+ * @param {Array} data The data matrix
+ * @returns {Array} Means of the columns
+ */
+export const means = data =>
+  data && data.length > 0
+    ? range(data[0].length).map(i => col(data, i)).map(mean)
+    : [];
+
+const range = len => [...Array(len).keys()];
+
+/**
+ * Remove one entry and add one new
+ * @param {Array} means
+ * @param {Number} size
+ * @param {Array} removed removed item
+ * @param {Array} input added item
+ * @returns {Array} The shifted means
+ */
+export const shiftMeans = (means, size, removed, input) =>
+  means.map((avg, i) => {
+    const remove = removed !== null && removed.length > 0;
+    const wr = remove ? removed[i] / size : 0;
+    const ds = remove ? 0 : 1; // does the size of the data increase?
+    const wi = input[i] / (size + ds);
+    const wa = avg * (size / (size + ds));
+    return wa + wi - wr;
+  });
+
+/**
  * Calculate the dot product of the two vectors
  * @param {Array} X
  * @param {Array} Y
