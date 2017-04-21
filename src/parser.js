@@ -12,6 +12,8 @@ export const parseSensorReading = line => {
   if (!isValid(tokens)) {
     throw new Error(`invalid sensoric reading '${line}'`);
   }
+
+  tokens.shift(); // the first token is the timestamp - get rid of it!
   return normalize(tokens);
 };
 
