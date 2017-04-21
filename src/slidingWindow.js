@@ -38,7 +38,7 @@ export const shift = (input, { capacity, size, data, means: oldMeans }) => {
     capacity,
     size: data.length,
     data,
-    means: oldMeans.length === 0 || removed > 1 // the means might not have been calculated yet (when we started from an emty window)
+    means: !oldMeans || oldMeans.length === 0 || removed > 1 // the means might not have been calculated yet (when we started from an emty window)
       ? means(data) // too radical change, calculate the means from scratch
       : shiftMeans(
           oldMeans,

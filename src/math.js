@@ -4,7 +4,7 @@
  * @returns {Number} The mean value
  */
 export const mean = X =>
-  X.length === 0 ? 0 : X.reduce((acc, x) => acc + x, 0) / X.length;
+  (X.length === 0 ? 0 : X.reduce((acc, x) => acc + x, 0) / X.length);
 
 /**
  * Calculate the means of the columns in the data matrix.
@@ -12,9 +12,9 @@ export const mean = X =>
  * @returns {Array} Means of the columns
  */
 export const means = data =>
-  data && data.length > 0
+  (data && data.length > 0
     ? range(data[0].length).map(i => col(data, i)).map(mean)
-    : [];
+    : []);
 
 const range = len => [...Array(len).keys()];
 

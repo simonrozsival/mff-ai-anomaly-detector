@@ -4,6 +4,10 @@
  * @param {string} line The raw input from the sensors
  */
 export const parseSensorReading = line => {
+  if (!line || line.length === 0) {
+    return null;
+  }
+
   const tokens = line.split(/\t/);
   if (!isValid(tokens)) {
     throw new Error(`invalid sensoric reading '${line}'`);
