@@ -45,13 +45,13 @@ const processDataFile = fileName => {
       lastTimestamp = Number(timestamp);
     });
   } catch (err) {
-    console.error(`Error while reading file ${fileName}: ${err}`);
+    console.error(`Error while reading file ${fileName}: ${err}`); // eslint-disable-line
   }
 };
 
 // read the table with the input data
 const fileName = process.argv.length > 2
   ? process.argv[2]
-  : './mock-data/flight_auto01/navdata.tsv';
+  : '../mock-data/flight_auto01/navdata.tsv';
 
 processDataFile(fileName);
