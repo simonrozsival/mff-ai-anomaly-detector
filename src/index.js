@@ -3,5 +3,6 @@
  * @author Šimon Rozsíval <simon@rozsival.com>
  */
 
-import detector from './detector';
+import detector, { init } from './detector';
 export default detector;
+export { init };

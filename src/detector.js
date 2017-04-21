@@ -5,15 +5,15 @@ import { delta, smooth } from './smoothing';
 
 export const init = (history, data = []) => create(history, data);
 
-const detect = (prev, next, window, ct = 0.6) => {
+const detect = (prev, next, window, ct = 0.6, onlyColumns = null) => {
   // preprocess the input
   const parsed = parseSensorReading(next);
   const deltaInput = delta(parseSensorReading(prev), parsed);
   const smoothInput = smooth(deltaInput, window);
 
-  // const input = parsed;
-  // const input = deltaInput;
-  const input = smoothInput;
+  const input = onlyColumns !== null
+    ? cols(onlyColumns, smoothInput)
+    : smoothInput;
 
   // try to detect the anomaly
   return window.size >= input.length && isAnomalous(input, window, ct)
