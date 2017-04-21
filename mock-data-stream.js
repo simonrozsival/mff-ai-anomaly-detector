@@ -7,7 +7,7 @@ import byline from 'byline';
  * @param {Object} data
  * @returns {string} The serialized input from the sensors
  */
-const serialize = (data) => {
+const serialize = data => {
   // the secret is that currently there is no difference between the input data and the output
   return data;
 };
@@ -17,40 +17,37 @@ const serialize = (data) => {
  * delay to simulate the stream of data from the drone.
  * @param {string} fileName The name of the data file.
  */
-const processDataFile = (fileName) => {
-
+const processDataFile = fileName => {
   try {
     let lastTimestamp = null;
     // read the csv file line-by-line and output all the data through a pipe
-    const input =  fs.createReadStream(fileName);
-    byline.createStream(input)
-      .on('data', data => {
-        const line = data.toString();
-        // the first token of the line is the millisecond timestamp
-        const [ timestamp ] = line.split(/\s+/, 1);
-        if (lastTimestamp === null) {
-          lastTimestamp = Number(timestamp); // there is no delay for the very first line
-        }
+    const input = fs.createReadStream(fileName);
+    byline.createStream(input).on('data', data => {
+      const line = data.toString();
+      // the first token of the line is the millisecond timestamp
+      const [timestamp] = line.split(/\s+/, 1);
+      if (lastTimestamp === null) {
+        lastTimestamp = Number(timestamp); // there is no delay for the very first line
+      }
 
-        // wait to simulate the delayed data from the drone
-        const delay = Number(timestamp) - lastTimestamp;
-        const resumeAfter = Date.now() + delay * 20;
+      // wait to simulate the delayed data from the drone
+      const delay = Number(timestamp) - lastTimestamp;
+      const resumeAfter = Date.now() + delay;
 
+      while (Date.now() < resumeAfter) {
         // active waiting - the data has very high frequency
-        while (Date.now() < resumeAfter) {}
+      }
 
-        // now print it out!
-        process.stdout.write(serialize(line + '\n'));
+      // now print it out!
+      process.stdout.write(serialize(line + '\n'));
 
-        // get ready for the next line
-        lastTimestamp = Number(timestamp);
-      });
+      // get ready for the next line
+      lastTimestamp = Number(timestamp);
+    });
   } catch (err) {
     console.error(`Error while reading file ${fileName}: ${err}`);
   }
-
 };
-
 
 // read the table with the input data
 const fileName = process.argv.length > 2

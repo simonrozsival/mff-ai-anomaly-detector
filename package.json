@@ -7,8 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "babel-node index.js",
-    "mock-data-stream": "babel-node mock-data-stream",
-    "mock-test": "npm run mock-data-stream | npm run start",
+    "mock-test": "babel-node mock-data-stream | npm run start",
     "test": "mocha",
     "lint": "eslint src"
   },
