@@ -2,8 +2,8 @@ import { expect } from 'chai';
 import {
   pearsonCorrelationCoefficient,
   onlineTrainer
-} from '../../src/onlineTrainer';
-import { mean } from '../../src/math';
+} from '../src/onlineTrainer';
+import { mean } from '../src/math';
 
 describe('Training test', () => {
   it('must behave well on empty data', () => {

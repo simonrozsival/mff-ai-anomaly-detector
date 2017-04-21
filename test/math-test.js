@@ -10,7 +10,7 @@ import {
   cols,
   variance,
   stddevs
-} from '../../src/math';
+} from '../src/math';
 
 chai.use(roughly);
 const { expect } = chai;

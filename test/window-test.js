@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { create, shift, trim } from '../../src/slidingWindow';
+import { create, shift, trim } from '../src/slidingWindow';
 
 describe('Sliding window', () => {
   it('must trim the window to a desired size', () => {
