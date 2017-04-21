@@ -52,6 +52,6 @@ const processDataFile = fileName => {
 // read the table with the input data
 const fileName = process.argv.length > 2
   ? process.argv[2]
-  : '../mock-data/flight_auto01/navdata.tsv';
+  : __dirname + '/mock-data/flight_auto01/navdata.tsv';
 
 processDataFile(fileName);
