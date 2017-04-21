@@ -15,5 +15,7 @@ export const smooth = (X, { data, means }) => {
   }
 
   const vars = variances({ data, means });
-  return X.map((x, i) => (x - means[i]) / vars[i]);
+  return X.map(
+    (x, i) => (vars[i] === 0 ? 0 : (x - means[i]) / Math.sqrt(vars[i]))
+  );
 };
