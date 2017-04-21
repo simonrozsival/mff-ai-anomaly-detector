@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import {
   pearsonCorrelationCoefficient,
+  isIncluded,
   onlineTrainer
 } from '../src/onlineTrainer';
 import { mean } from '../src/math';
@@ -34,5 +35,11 @@ describe('Training test', () => {
       const rounded = Math.round(r * 10000) / 10000;
       expect(rounded).to.equal(p);
     });
+  });
+
+  it('must detect that an array is already included', () => {
+    const data = [[1, 2, 3]];
+    expect(isIncluded([1, 2, 3], data)).to.equal(true);
+    expect(isIncluded([2, 3, 4], data)).to.equal(false);
   });
 });

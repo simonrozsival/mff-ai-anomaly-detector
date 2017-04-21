@@ -1,6 +1,15 @@
 import mahalanobis from '../../mahalanobis';
 import { dot, col, cols } from './math';
 
+export const isIncluded = (attrs, correlation) =>
+  correlation.reduce(
+    (included, x) =>
+      included ||
+      (attrs.length === x.length &&
+        attrs.reduce((allSame, y, i) => allSame && y === x[i], true)),
+    false
+  );
+
 /**
  * Detect the correlated attributes in the data.
  * @param {Array} data
@@ -26,7 +35,7 @@ const correlationDetector = ({ data, means }, ct) => {
       }
     }
 
-    if (attrs.length > 1) {
+    if (attrs.length > 1 && !isIncluded(attrs, correlation)) {
       correlation.push(attrs);
     }
   }
