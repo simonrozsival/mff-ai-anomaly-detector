@@ -2,8 +2,7 @@ import readline from 'readline';
 import detect from './src';
 
 const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stderr
+  input: process.stdin
 });
 
 let window = null;

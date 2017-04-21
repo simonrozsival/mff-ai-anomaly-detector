@@ -55,15 +55,11 @@ export const pearsonCorrelationCoefficient = (X, mx, Y, my) => {
  * @returns {Array}
  */
 const attachThresholds = (correlatations, data) =>
-  correlatations.map(CS => [CS, threshold(CS, data)]);
-
-/**
- * Calculate the thresholds for each set of correlated attributes.
- * @param {Array} CS The sets of correlated attributes
- * @param {Array} data The whole dataset
- */
-const threshold = (CS, data) =>
-  CS.map(cs => Math.max(...mahalanobis(cols(data, cs)).all()));
+  correlatations.map(cs => {
+    const metric = mahalanobis(cols(data, cs));
+    const ts = Math.max(...metric.all());
+    return { cs, ts, metric };
+  });
 
 /**
  *
