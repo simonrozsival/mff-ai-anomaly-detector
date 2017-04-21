@@ -3,23 +3,42 @@ import { shift, create } from './slidingWindow';
 import { isAnomalous } from './isAnomalous';
 import { delta, smooth } from './smoothing';
 
-export default (prevReading, reading, window) => {
-  if (!reading || reading.length === 0) {
+export const init = (history, data = []) => create(history, data);
+
+const detect = (prev, next, window, ct = 0.6) => {
+  // preprocess the input
+  const parsed = parseSensorReading(next);
+  const deltaInput = delta(parseSensorReading(prev), parsed);
+  const smoothInput = smooth(deltaInput, window);
+
+  // const input = parsed;
+  // const input = deltaInput;
+  const input = smoothInput;
+
+  // try to detect the anomaly
+  return window.size >= input.length && isAnomalous(input, window, ct)
+    ? { anomalyDetected: true, window }
+    : {
+        skipped: window.size < input.length,
+        anomalyDetected: false,
+        window: shift(input, window)
+      };
+};
+
+export default (prev, next, window, ct = 0.6) => {
+  if (!next || next.length === 0) {
     throw new Error('Invalid (null or empty) raw reading from the sensors.');
   }
 
-  const input = parseSensorReading(reading);
-  const prev = parseSensorReading(prevReading);
-
+  // in case of first run initialise the window
   if (window === null) {
-    window = create(100);
+    throw new Error('The sliding window is not initialised.');
   }
 
-  // preprocess the input
-  const deltaInput = delta(prev, input);
-  const smoothInput = smooth(deltaInput, window);
+  // in case of first run initialise the window
+  if (prev === null) {
+    throw new Error('The sliding window is not initialised.');
+  }
 
-  return isAnomalous(smoothInput, window)
-    ? { anomalyDetected: true, window }
-    : { anomalyDetected: false, window: shift(smoothInput, window) };
+  return detect(prev, next, window, ct);
 };
