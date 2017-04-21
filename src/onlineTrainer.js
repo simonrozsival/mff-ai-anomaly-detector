@@ -1,18 +1,5 @@
-import distance from './mahalanobis';
+import mahalanobis from '../../mahalanobis';
 import { dot, col, cols } from './math';
-
-/**
- *
- * @param {Array} data The data
- * @param {Number} ct The correlation threshold constant
- * @returns {Array} The sets of correlated attributes with the threshold distance
- */
-export const onlineTrainer = ({ data, means }, ct = 0.6) => {
-  const correlations = correlationDetector({ data, means }, ct);
-  const withThresholds = computeThresholds(correlations, data);
-
-  return withThresholds;
-};
 
 /**
  * Detect the correlated attributes in the data.
@@ -20,7 +7,7 @@ export const onlineTrainer = ({ data, means }, ct = 0.6) => {
  * @param {Number} ct The correlation threshold constant
  * @returns {Array} The array of correlated attributes with their thresholds
  */
-const corelationDetector = ({ data, means }, ct) => {
+const correlationDetector = ({ data, means }, ct) => {
   if (data.length === 0) {
     return []; // no items === no correlation
   }
@@ -28,7 +15,7 @@ const corelationDetector = ({ data, means }, ct) => {
   let correlation = [];
   const attributesCount = data[0].length;
 
-  for (let i = 0; i < attributesCount; ++j) {
+  for (let i = 0; i < attributesCount; ++i) {
     let attrs = [];
     for (let j = 0; j < attributesCount; ++j) {
       const A = col(data, i);
@@ -55,7 +42,7 @@ const corelationDetector = ({ data, means }, ct) => {
  * * @param {Number} my Mean of Y
  * @returns {Number} The correlation coefficient
  */
-const pearsonCorrelationCoefficient = (X, mx, Y, my) => {
+export const pearsonCorrelationCoefficient = (X, mx, Y, my) => {
   const mX = X.map(x => x - mx);
   const mY = Y.map(y => y - my);
   return dot(mX, mY) / Math.sqrt(dot(mX, mX) * dot(mY, mY));
@@ -67,7 +54,7 @@ const pearsonCorrelationCoefficient = (X, mx, Y, my) => {
  * @param {Array} data
  * @returns {Array}
  */
-const withThresholds = (correlatations, data) =>
+const attachThresholds = (correlatations, data) =>
   correlatations.map(CS => [CS, threshold(CS, data)]);
 
 /**
@@ -76,8 +63,15 @@ const withThresholds = (correlatations, data) =>
  * @param {Array} data The whole dataset
  */
 const threshold = (CS, data) =>
-  CS.map(cs => {
-    const selectedColumnsOnly = cols(data, cs);
-    const distances = data.map(item => disatnce(item, data));
-    return Math.max(...distance);
-  });
+  CS.map(cs => Math.max(...mahalanobis(cols(data, cs)).all()));
+
+/**
+ *
+ * @param {Array} data The data
+ * @param {Number} ct The correlation threshold constant
+ * @returns {Array} The sets of correlated attributes with the threshold distance
+ */
+export const onlineTrainer = ({ data, means }, ct = 0.6) => {
+  const correlations = correlationDetector({ data, means }, ct);
+  return attachThresholds(correlations, data);
+};
