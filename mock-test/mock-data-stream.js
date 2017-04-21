@@ -17,7 +17,7 @@ const serialize = data => {
  * delay to simulate the stream of data from the drone.
  * @param {string} fileName The name of the data file.
  */
-const processDataFile = fileName => {
+const processDataFile = (fileName, noDelay = false) => {
   try {
     let lastTimestamp = null;
     // read the csv file line-by-line and output all the data through a pipe
@@ -30,12 +30,14 @@ const processDataFile = fileName => {
         lastTimestamp = Number(timestamp); // there is no delay for the very first line
       }
 
-      // wait to simulate the delayed data from the drone
-      const delay = Number(timestamp) - lastTimestamp;
-      const resumeAfter = Date.now() + delay;
+      if (noDelay !== true) {
+        // wait to simulate the delayed data from the drone
+        const delay = Number(timestamp) - lastTimestamp;
+        const resumeAfter = Date.now() + delay;
 
-      while (Date.now() < resumeAfter) {
-        // active waiting - the data has very high frequency
+        while (Date.now() < resumeAfter) {
+          // active waiting - the data has very high frequency
+        }
       }
 
       // now print it out!
@@ -50,8 +52,12 @@ const processDataFile = fileName => {
 };
 
 // read the table with the input data
-const fileName = process.argv.length > 2
+const fileName = process.argv.length > 2 && process.argv[2][0] !== '-'
   ? process.argv[2]
   : __dirname + '/mock-data/flight_auto01/navdata.tsv';
 
-processDataFile(fileName);
+const noDelay =
+  (process.argv.length > 2 && process.argv[2] === '--no-delay') ||
+  (process.argv.length > 3 && process.argv[2] === '--no-delay');
+
+processDataFile(fileName, noDelay);
