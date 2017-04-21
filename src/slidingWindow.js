@@ -6,8 +6,7 @@ import { means, shiftMeans } from './math';
  */
 export const create = (capacity, data = []) => {
   if (data.length >= capacity) {
-    let removed = null;
-    [data, removed] = trim(data, capacity);
+    [data] = trim(data, capacity);
   }
 
   return {
