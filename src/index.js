@@ -3,8 +3,5 @@
  * @author Šimon Rozsíval <simon@rozsival.com>
  */
 
-export { isAnomalous } from './isAnomalous';
-
-export { parseSensorReading } from './parser';
-
-export { delta, smooth } from './smoothing';
+import detector from './detector';
+export default detector;
