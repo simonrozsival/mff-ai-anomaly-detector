@@ -54,10 +54,9 @@ const processDataFile = (fileName, noDelay = false) => {
 // read the table with the input data
 const fileName = process.argv.length > 2 && process.argv[2][0] !== '-'
   ? process.argv[2]
-  : __dirname + '/mock-data/flight_auto01/navdata.tsv';
+  : __dirname + '/mock-data/flight_auto05/navdata.tsv';
 
-const noDelay =
-  (process.argv.length > 2 && process.argv[2] === '--no-delay') ||
+const noDelay = (process.argv.length > 2 && process.argv[2] === '--no-delay') ||
   (process.argv.length > 3 && process.argv[2] === '--no-delay');
 
 processDataFile(fileName, noDelay);
