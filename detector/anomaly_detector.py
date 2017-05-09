@@ -4,14 +4,13 @@
 The unsupervised on-line anomaly detector by Simon Rozsival.
 """
 
-import sys
 from .src.window import create_window
 from .src.parser import parse
 from .src.state import INITIAL_STATE, update_state
 from .src.detector import is_anomalous
 
 
-def run_detector():
+def run_detector(sensoric_readings):
     """ Collect all the inputs from the stdin and analyze the data. """
     prev_data_point = None
     window = None
@@ -21,7 +20,7 @@ def run_detector():
     print("--- anomaly detector: waiting for the start of the data stream ---")
 
     # [2] try to detect all the anomalies
-    for reading in sys.stdin:
+    for reading in sensoric_readings:
         if window is None:
             window = create_window(100)
 

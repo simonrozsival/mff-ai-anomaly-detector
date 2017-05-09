@@ -6,9 +6,9 @@ from .window import update_window
 from .online_trainer import online_trainer
 
 
-def delta(prev, next):
+def delta(prev_point, next_point):
     """ Interesting is only the change in the data. """
-    return next - prev
+    return next_point - prev_point if prev_point is not None else next_point
 
 
 def smoothen(window, point):
@@ -18,7 +18,7 @@ def smoothen(window, point):
 
 
 def detect(window, next_data_point, ct=0.6):
-    """ Is the next dat apoint anomalous? """
+    """ Is the next data point anomalous? """
     correlated_attributes = online_trainer(window, ct)
     anomalies = 0
 
@@ -34,8 +34,12 @@ def is_anomalous(window, prev_data_point, next_data_point, ct=0.6):
     """ Try to detect anomalous sensoric reading. """
     delta_point = delta(prev_data_point, next_data_point)
     smooth_point = smoothen(window, delta_point)
+    skipped = False
+    detected = False
 
-    if window.size >= len(next_data_point):
-        return False, detect(window, smooth_point, ct=ct), update_window(window, smooth_point)
+    if len(window.data) >= len(next_data_point):
+        detected = detect(window, smooth_point, ct=ct)
     else:
-        return True, False, window
+        skipped = True
+
+    return skipped, detected, update_window(window, smooth_point)
